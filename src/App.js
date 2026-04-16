@@ -108,17 +108,21 @@ export default function App() {
   return (
     <div className="min-h-screen bg-orange-50 font-sans text-gray-800 pb-10">
       <header className="bg-white shadow-sm p-4 sticky top-0 z-10">
-        <div className="max-w-4xl mx-auto relative flex items-center justify-center min-h-[4rem]">
-          {/* 가운데 정렬된 로고와 이름 (세로 배치) */}
-          <div className="flex flex-col items-center gap-1 text-orange-600 mt-1">
-            <img src="/welfare_logo.png" alt="티뷰크사회복지재단 금천누리종합사회복지관" className="h-10 w-auto" />
-            <h1 className="text-xl font-bold tracking-tight">마음편의점</h1>
+        <div className="max-w-5xl mx-auto relative flex items-center justify-center min-h-[3rem]">
+          {/* 좌측 끝: 로고 이미지 */}
+          <div className="absolute left-0 flex items-center">
+            <img src="/welfare_logo.png" alt="티뷰크사회복지재단 금천누리종합사회복지관" className="h-8 md:h-10 w-auto" />
           </div>
           
-          {/* 우측 정렬된 메뉴 버튼들 */}
+          {/* 중앙: 마음편의점 타이틀 */}
+          <div className="flex items-center text-orange-600">
+            <h1 className="text-2xl md:text-3xl font-bold tracking-tight">마음편의점</h1>
+          </div>
+          
+          {/* 우측 끝: 메뉴 버튼들 */}
           <div className="absolute right-0 flex gap-2">
-            <button onClick={() => setActiveTab('register')} className={`px-4 py-2 rounded-full font-medium ${activeTab === 'register' ? 'bg-orange-500 text-white shadow-md' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors'}`}>방문 등록</button>
-            <button onClick={() => setActiveTab('admin')} className={`px-4 py-2 rounded-full font-medium flex items-center gap-1 ${activeTab === 'admin' ? 'bg-teal-600 text-white shadow-md' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors'}`}><ClipboardList className="w-4 h-4" /> 관리자</button>
+            <button onClick={() => setActiveTab('register')} className={`px-3 py-1.5 md:px-4 md:py-2 rounded-full font-medium text-sm md:text-base ${activeTab === 'register' ? 'bg-orange-500 text-white shadow-md' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors'}`}>방문 등록</button>
+            <button onClick={() => setActiveTab('admin')} className={`px-3 py-1.5 md:px-4 md:py-2 rounded-full font-medium flex items-center gap-1 text-sm md:text-base ${activeTab === 'admin' ? 'bg-teal-600 text-white shadow-md' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors'}`}><ClipboardList className="w-4 h-4" /> 관리자</button>
           </div>
         </div>
       </header>
