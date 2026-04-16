@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { User, Calendar, ClipboardList, Clock, Download, Home, Edit2, Trash2, Check, X, Coffee, Music, Zap } from 'lucide-react';
+import { User, Calendar, ClipboardList, Clock, Download, Home, Edit2, Trash2, Check, X, Zap } from 'lucide-react';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('register');
@@ -18,6 +18,7 @@ export default function App() {
   const [editFormData, setEditFormData] = useState({});
   const [deleteConfirmId, setDeleteConfirmId] = useState(null);
 
+  // [핵심] 앱이 켜질 때 브라우저 저장소에서 데이터를 가져옵니다.
   useEffect(() => {
     const savedData = localStorage.getItem('maum_visitors_v2');
     if (savedData) {
@@ -25,6 +26,7 @@ export default function App() {
     }
   }, []);
 
+  // [핵심] 데이터가 추가/수정/삭제될 때마다 브라우저 저장소에 즉시 기록합니다.
   useEffect(() => {
     localStorage.setItem('maum_visitors_v2', JSON.stringify(visitors));
   }, [visitors]);
@@ -44,14 +46,13 @@ export default function App() {
       return;
     }
 
-    // 활동 내용 문자열 생성
     let activities = [];
     if (formData.foodEnabled && formData.foodType) activities.push(`식품(${formData.foodType})`);
     if (formData.massage) activities.push('마사지기');
     if (formData.karaoke) activities.push('노래방부스');
 
     if (activities.length === 0) {
-      alert('활동 내용을 최소 하나 이상 선택해주세요.');
+      alert('활동 내용을 하나 이상 선택해주세요.');
       return;
     }
 
@@ -107,16 +108,16 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-orange-50 font-sans text-gray-800 selection:bg-orange-200 pb-10">
+    <div className="min-h-screen bg-orange-50 font-sans text-gray-800 pb-10">
       <header className="bg-white shadow-sm p-4 sticky top-0 z-10">
         <div className="max-w-4xl mx-auto flex justify-between items-center">
           <div className="flex items-center gap-2 text-orange-600">
             <Home className="w-8 h-8" />
-            <h1 className="text-2xl font-bold tracking-tight">마음편의점</h1>
+            <h1 className="text-2xl font-bold">마음편의점</h1>
           </div>
           <div className="flex gap-2">
-            <button onClick={() => setActiveTab('register')} className={`px-4 py-2 rounded-full font-medium transition-colors ${activeTab === 'register' ? 'bg-orange-500 text-white shadow-md' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}>방문 등록</button>
-            <button onClick={() => setActiveTab('admin')} className={`px-4 py-2 rounded-full font-medium transition-colors flex items-center gap-1 ${activeTab === 'admin' ? 'bg-teal-600 text-white shadow-md' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}><ClipboardList className="w-4 h-4" /> 관리자</button>
+            <button onClick={() => setActiveTab('register')} className={`px-4 py-2 rounded-full font-medium ${activeTab === 'register' ? 'bg-orange-500 text-white' : 'bg-gray-100 text-gray-600'}`}>방문 등록</button>
+            <button onClick={() => setActiveTab('admin')} className={`px-4 py-2 rounded-full font-medium flex items-center gap-1 ${activeTab === 'admin' ? 'bg-teal-600 text-white' : 'bg-gray-100 text-gray-600'}`}><ClipboardList className="w-4 h-4" /> 관리자</button>
           </div>
         </div>
       </header>
@@ -129,77 +130,67 @@ export default function App() {
               <p className="text-orange-100">마음편의점 금천2호점입니다.</p>
             </div>
             
-            <form onSubmit={handleSubmit} className="p-8 space-y-8">
+            <form onSubmit={handleSubmit} className="p-8 space-y-6">
               <div className="space-y-2">
                 <label className="flex items-center gap-2 text-lg font-semibold text-gray-700"><User className="w-5 h-5 text-orange-500" /> 이름</label>
-                <input type="text" name="name" value={formData.name} onChange={handleInputChange} placeholder="홍길동" className="w-full p-4 text-lg border-2 border-gray-200 rounded-xl focus:border-orange-500 focus:ring-2 focus:ring-orange-200 outline-none transition-all" />
+                <input type="text" name="name" value={formData.name} onChange={handleInputChange} placeholder="이름을 입력하세요" className="w-full p-4 text-lg border-2 border-gray-100 rounded-xl focus:border-orange-500 outline-none" />
               </div>
               
               <div className="space-y-2">
                 <label className="flex items-center gap-2 text-lg font-semibold text-gray-700"><Calendar className="w-5 h-5 text-orange-500" /> 생년월일</label>
-                <input type="date" name="birthDate" value={formData.birthDate} onChange={handleInputChange} max={new Date().toISOString().split("T")[0]} className="w-full p-4 text-lg border-2 border-gray-200 rounded-xl focus:border-orange-500 focus:ring-2 focus:ring-orange-200 outline-none transition-all" />
+                <input type="date" name="birthDate" value={formData.birthDate} onChange={handleInputChange} max={new Date().toISOString().split("T")[0]} className="w-full p-4 text-lg border-2 border-gray-100 rounded-xl focus:border-orange-500 outline-none" />
               </div>
 
               <div className="space-y-4">
-                <label className="flex items-center gap-2 text-lg font-semibold text-gray-700"><Zap className="w-5 h-5 text-orange-500" /> 활동 내용 (중복 선택 가능)</label>
-                
-                <div className="space-y-4 border-t pt-4">
-                  {/* 식품 섭취 섹션 */}
-                  <div className={`p-4 rounded-xl border-2 transition-all ${formData.foodEnabled ? 'border-orange-400 bg-orange-50' : 'border-gray-100'}`}>
+                <label className="flex items-center gap-2 text-lg font-semibold text-gray-700"><Zap className="w-5 h-5 text-orange-500" /> 활동 내용</label>
+                <div className="space-y-3 pt-2">
+                  <div className={`p-4 rounded-xl border-2 ${formData.foodEnabled ? 'border-orange-400 bg-orange-50' : 'border-gray-50'}`}>
                     <label className="flex items-center gap-3 cursor-pointer">
                       <input type="checkbox" name="foodEnabled" checked={formData.foodEnabled} onChange={handleInputChange} className="w-6 h-6 accent-orange-500" />
-                      <span className="text-xl font-medium">식품 섭취</span>
+                      <span className="text-lg font-medium">식품 섭취</span>
                     </label>
                     {formData.foodEnabled && (
-                      <div className="flex gap-4 mt-4 ml-9">
-                        <label className="flex items-center gap-2 cursor-pointer bg-white px-4 py-2 rounded-lg border shadow-sm">
-                          <input type="radio" name="foodType" value="라면" checked={formData.foodType === '라면'} onChange={handleInputChange} className="w-5 h-5 accent-orange-500" />
-                          <span className="text-lg">라면</span>
-                        </label>
-                        <label className="flex items-center gap-2 cursor-pointer bg-white px-4 py-2 rounded-lg border shadow-sm">
-                          <input type="radio" name="foodType" value="음료" checked={formData.foodType === '음료'} onChange={handleInputChange} className="w-5 h-5 accent-orange-500" />
-                          <span className="text-lg">음료</span>
-                        </label>
+                      <div className="flex gap-4 mt-3 ml-9">
+                        {['라면', '음료'].map(type => (
+                          <label key={type} className="flex items-center gap-2 cursor-pointer bg-white px-3 py-2 rounded-lg border shadow-sm">
+                            <input type="radio" name="foodType" value={type} checked={formData.foodType === type} onChange={handleInputChange} className="w-5 h-5 accent-orange-500" />
+                            <span>{type}</span>
+                          </label>
+                        ))}
                       </div>
                     )}
                   </div>
-
-                  {/* 마사지기 */}
-                  <label className={`flex items-center gap-3 p-4 rounded-xl border-2 cursor-pointer transition-all ${formData.massage ? 'border-orange-400 bg-orange-50' : 'border-gray-100'}`}>
-                    <input type="checkbox" name="massage" checked={formData.massage} onChange={handleInputChange} className="w-6 h-6 accent-orange-500" />
-                    <span className="text-xl font-medium">마사지기</span>
-                  </label>
-
-                  {/* 노래방부스 */}
-                  <label className={`flex items-center gap-3 p-4 rounded-xl border-2 cursor-pointer transition-all ${formData.karaoke ? 'border-orange-400 bg-orange-50' : 'border-gray-100'}`}>
-                    <input type="checkbox" name="karaoke" checked={formData.karaoke} onChange={handleInputChange} className="w-6 h-6 accent-orange-500" />
-                    <span className="text-xl font-medium">노래방부스</span>
-                  </label>
+                  {['massage', 'karaoke'].map(key => (
+                    <label key={key} className={`flex items-center gap-3 p-4 rounded-xl border-2 cursor-pointer ${formData[key] ? 'border-orange-400 bg-orange-50' : 'border-gray-50'}`}>
+                      <input type="checkbox" name={key} checked={formData[key]} onChange={handleInputChange} className="w-6 h-6 accent-orange-500" />
+                      <span className="text-lg font-medium">{key === 'massage' ? '마사지기' : '노래방부스'}</span>
+                    </label>
+                  ))}
                 </div>
               </div>
 
-              <button type="submit" className="w-full bg-orange-500 hover:bg-orange-600 text-white text-2xl font-bold py-6 rounded-2xl shadow-lg transform transition active:scale-95 mt-4">방문 기록하기</button>
+              <button type="submit" className="w-full bg-orange-500 hover:bg-orange-600 text-white text-2xl font-bold py-5 rounded-2xl shadow-lg mt-4 transition-transform active:scale-95">방문 기록하기</button>
             </form>
           </div>
         )}
 
         {activeTab === 'admin' && (
-          <div className="bg-white rounded-3xl shadow-lg border border-gray-100 p-6 md:p-8">
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+          <div className="bg-white rounded-3xl shadow-lg p-6 border border-gray-100">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
               <h2 className="text-2xl font-bold text-gray-800 flex items-center gap-2">방문자 리스트</h2>
               <div className="flex gap-2 w-full md:w-auto">
-                <select value={filter} onChange={(e) => setFilter(e.target.value)} className="p-3 border rounded-lg bg-gray-50 outline-none focus:ring-2 focus:ring-teal-500">
+                <select value={filter} onChange={(e) => setFilter(e.target.value)} className="p-2 border rounded-lg bg-gray-50">
                   <option value="all">전체 보기</option>
                   <option value="week">최근 1주일</option>
                   <option value="month">이번 달</option>
                 </select>
-                <button onClick={downloadCSV} className="bg-teal-600 hover:bg-teal-700 text-white px-5 py-3 rounded-lg font-medium flex items-center gap-2">
-                  <Download className="w-5 h-5" /> 엑셀 다운로드
+                <button onClick={downloadCSV} className="bg-teal-600 text-white px-4 py-2 rounded-lg font-medium flex items-center gap-2 shadow-sm">
+                  <Download className="w-4 h-4" /> 엑셀 다운로드
                 </button>
               </div>
             </div>
             
-            <div className="overflow-x-auto rounded-xl border border-gray-200">
+            <div className="overflow-x-auto rounded-xl border border-gray-100">
               <table className="w-full text-left border-collapse">
                 <thead>
                   <tr className="bg-gray-50 text-gray-600 border-b">
@@ -211,26 +202,34 @@ export default function App() {
                   </tr>
                 </thead>
                 <tbody>
-                  {getFilteredVisitors().map((visitor) => (
-                    <tr key={visitor.id} className="border-b hover:bg-teal-50/30 transition-colors">
-                      <td className="p-4 text-sm text-gray-600">{new Date(visitor.visitDate).toLocaleString('ko-KR', { month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' })}</td>
-                      <td className="p-4 font-medium text-gray-800">{visitor.name}</td>
-                      <td className="p-4 text-gray-600">{visitor.birthDate}</td>
-                      <td className="p-4"><span className="px-3 py-1 bg-orange-100 text-orange-700 rounded-full text-sm font-medium">{visitor.activity}</span></td>
-                      <td className="p-4 text-center">
-                        {deleteConfirmId === visitor.id ? (
-                          <div className="flex gap-1 justify-center">
-                            <button onClick={() => { setVisitors(prev => prev.filter(v => v.id !== visitor.id)); setDeleteConfirmId(null); }} className="text-xs p-1 bg-red-500 text-white rounded">확인</button>
-                            <button onClick={() => setDeleteConfirmId(null)} className="text-xs p-1 bg-gray-200 rounded">취소</button>
-                          </div>
-                        ) : (
-                          <button onClick={() => setDeleteConfirmId(visitor.id)} className="p-1 text-red-600 hover:bg-red-50 rounded"><Trash2 className="w-4 h-4"/></button>
-                        )}
-                      </td>
-                    </tr>
-                  ))}
+                  {getFilteredVisitors().length === 0 ? (
+                    <tr><td colSpan="5" className="p-10 text-center text-gray-400">조회된 기록이 없습니다.</td></tr>
+                  ) : (
+                    getFilteredVisitors().map((visitor) => (
+                      <tr key={visitor.id} className="border-b hover:bg-teal-50/20">
+                        {/* 연도 표시 옵션 추가: year: 'numeric' */}
+                        <td className="p-4 text-sm text-gray-500">{new Date(visitor.visitDate).toLocaleString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' })}</td>
+                        <td className="p-4 font-bold">{visitor.name}</td>
+                        <td className="p-4 text-gray-600">{visitor.birthDate}</td>
+                        <td className="p-4"><span className="px-3 py-1 bg-orange-100 text-orange-700 rounded-full text-xs font-bold">{visitor.activity}</span></td>
+                        <td className="p-4 text-center">
+                          {deleteConfirmId === visitor.id ? (
+                            <div className="flex gap-1 justify-center">
+                              <button onClick={() => { setVisitors(prev => prev.filter(v => v.id !== visitor.id)); setDeleteConfirmId(null); }} className="px-2 py-1 bg-red-500 text-white rounded text-xs">삭제</button>
+                              <button onClick={() => setDeleteConfirmId(null)} className="px-2 py-1 bg-gray-200 rounded text-xs">취소</button>
+                            </div>
+                          ) : (
+                            <button onClick={() => setDeleteConfirmId(visitor.id)} className="p-1 text-red-600 hover:bg-red-50 rounded"><Trash2 className="w-4 h-4"/></button>
+                          )}
+                        </td>
+                      </tr>
+                    ))
+                  )}
                 </tbody>
               </table>
+            </div>
+            <div className="mt-4 text-right text-gray-400 text-sm">
+              총 {getFilteredVisitors().length}명의 데이터가 로컬 저장소에 보관 중입니다.
             </div>
           </div>
         )}
