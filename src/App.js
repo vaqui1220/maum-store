@@ -18,7 +18,6 @@ export default function App() {
   const [editFormData, setEditFormData] = useState({});
   const [deleteConfirmId, setDeleteConfirmId] = useState(null);
 
-  // [핵심] 앱이 켜질 때 브라우저 저장소에서 데이터를 가져옵니다.
   useEffect(() => {
     const savedData = localStorage.getItem('maum_visitors_v2');
     if (savedData) {
@@ -26,7 +25,6 @@ export default function App() {
     }
   }, []);
 
-  // [핵심] 데이터가 추가/수정/삭제될 때마다 브라우저 저장소에 즉시 기록합니다.
   useEffect(() => {
     localStorage.setItem('maum_visitors_v2', JSON.stringify(visitors));
   }, [visitors]);
@@ -110,16 +108,17 @@ export default function App() {
   return (
     <div className="min-h-screen bg-orange-50 font-sans text-gray-800 pb-10">
       <header className="bg-white shadow-sm p-4 sticky top-0 z-10">
-        <div className="max-w-4xl mx-auto flex justify-between items-center">
-          <div className="flex items-center gap-2 text-orange-600">
-            {/* [수정 시작] 로고 이미지 추가 부분 */}
+        <div className="max-w-4xl mx-auto relative flex items-center justify-center min-h-[4rem]">
+          {/* 가운데 정렬된 로고와 이름 (세로 배치) */}
+          <div className="flex flex-col items-center gap-1 text-orange-600 mt-1">
             <img src="/welfare_logo.png" alt="티뷰크사회복지재단 금천누리종합사회복지관" className="h-10 w-auto" />
-            {/* [수정 끝] */}
-            <h1 className="text-2xl font-bold">마음편의점</h1>
+            <h1 className="text-xl font-bold tracking-tight">마음편의점</h1>
           </div>
-          <div className="flex gap-2">
-            <button onClick={() => setActiveTab('register')} className={`px-4 py-2 rounded-full font-medium ${activeTab === 'register' ? 'bg-orange-500 text-white' : 'bg-gray-100 text-gray-600'}`}>방문 등록</button>
-            <button onClick={() => setActiveTab('admin')} className={`px-4 py-2 rounded-full font-medium flex items-center gap-1 ${activeTab === 'admin' ? 'bg-teal-600 text-white' : 'bg-gray-100 text-gray-600'}`}><ClipboardList className="w-4 h-4" /> 관리자</button>
+          
+          {/* 우측 정렬된 메뉴 버튼들 */}
+          <div className="absolute right-0 flex gap-2">
+            <button onClick={() => setActiveTab('register')} className={`px-4 py-2 rounded-full font-medium ${activeTab === 'register' ? 'bg-orange-500 text-white shadow-md' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors'}`}>방문 등록</button>
+            <button onClick={() => setActiveTab('admin')} className={`px-4 py-2 rounded-full font-medium flex items-center gap-1 ${activeTab === 'admin' ? 'bg-teal-600 text-white shadow-md' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors'}`}><ClipboardList className="w-4 h-4" /> 관리자</button>
           </div>
         </div>
       </header>
@@ -135,18 +134,18 @@ export default function App() {
             <form onSubmit={handleSubmit} className="p-8 space-y-6">
               <div className="space-y-2">
                 <label className="flex items-center gap-2 text-lg font-semibold text-gray-700"><User className="w-5 h-5 text-orange-500" /> 이름</label>
-                <input type="text" name="name" value={formData.name} onChange={handleInputChange} placeholder="이름을 입력하세요" className="w-full p-4 text-lg border-2 border-gray-100 rounded-xl focus:border-orange-500 outline-none" />
+                <input type="text" name="name" value={formData.name} onChange={handleInputChange} placeholder="이름을 입력하세요" className="w-full p-4 text-lg border-2 border-gray-100 rounded-xl focus:border-orange-500 outline-none transition-all" />
               </div>
               
               <div className="space-y-2">
                 <label className="flex items-center gap-2 text-lg font-semibold text-gray-700"><Calendar className="w-5 h-5 text-orange-500" /> 생년월일</label>
-                <input type="date" name="birthDate" value={formData.birthDate} onChange={handleInputChange} max={new Date().toISOString().split("T")[0]} className="w-full p-4 text-lg border-2 border-gray-100 rounded-xl focus:border-orange-500 outline-none" />
+                <input type="date" name="birthDate" value={formData.birthDate} onChange={handleInputChange} max={new Date().toISOString().split("T")[0]} className="w-full p-4 text-lg border-2 border-gray-100 rounded-xl focus:border-orange-500 outline-none transition-all" />
               </div>
 
               <div className="space-y-4">
                 <label className="flex items-center gap-2 text-lg font-semibold text-gray-700"><Zap className="w-5 h-5 text-orange-500" /> 활동 내용</label>
                 <div className="space-y-3 pt-2">
-                  <div className={`p-4 rounded-xl border-2 ${formData.foodEnabled ? 'border-orange-400 bg-orange-50' : 'border-gray-50'}`}>
+                  <div className={`p-4 rounded-xl border-2 transition-all ${formData.foodEnabled ? 'border-orange-400 bg-orange-50' : 'border-gray-50'}`}>
                     <label className="flex items-center gap-3 cursor-pointer">
                       <input type="checkbox" name="foodEnabled" checked={formData.foodEnabled} onChange={handleInputChange} className="w-6 h-6 accent-orange-500" />
                       <span className="text-lg font-medium">식품 섭취</span>
@@ -163,7 +162,7 @@ export default function App() {
                     )}
                   </div>
                   {['massage', 'karaoke'].map(key => (
-                    <label key={key} className={`flex items-center gap-3 p-4 rounded-xl border-2 cursor-pointer ${formData[key] ? 'border-orange-400 bg-orange-50' : 'border-gray-50'}`}>
+                    <label key={key} className={`flex items-center gap-3 p-4 rounded-xl border-2 cursor-pointer transition-all ${formData[key] ? 'border-orange-400 bg-orange-50' : 'border-gray-50'}`}>
                       <input type="checkbox" name={key} checked={formData[key]} onChange={handleInputChange} className="w-6 h-6 accent-orange-500" />
                       <span className="text-lg font-medium">{key === 'massage' ? '마사지기' : '노래방부스'}</span>
                     </label>
@@ -181,12 +180,12 @@ export default function App() {
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
               <h2 className="text-2xl font-bold text-gray-800 flex items-center gap-2">방문자 리스트</h2>
               <div className="flex gap-2 w-full md:w-auto">
-                <select value={filter} onChange={(e) => setFilter(e.target.value)} className="p-2 border rounded-lg bg-gray-50">
+                <select value={filter} onChange={(e) => setFilter(e.target.value)} className="p-2 border rounded-lg bg-gray-50 outline-none focus:ring-2 focus:ring-teal-500">
                   <option value="all">전체 보기</option>
                   <option value="week">최근 1주일</option>
                   <option value="month">이번 달</option>
                 </select>
-                <button onClick={downloadCSV} className="bg-teal-600 text-white px-4 py-2 rounded-lg font-medium flex items-center gap-2 shadow-sm">
+                <button onClick={downloadCSV} className="bg-teal-600 text-white px-4 py-2 rounded-lg font-medium flex items-center gap-2 shadow-sm hover:bg-teal-700 transition-colors">
                   <Download className="w-4 h-4" /> 엑셀 다운로드
                 </button>
               </div>
@@ -208,8 +207,7 @@ export default function App() {
                     <tr><td colSpan="5" className="p-10 text-center text-gray-400">조회된 기록이 없습니다.</td></tr>
                   ) : (
                     getFilteredVisitors().map((visitor) => (
-                      <tr key={visitor.id} className="border-b hover:bg-teal-50/20">
-                        {/* 연도 표시 옵션 추가: year: 'numeric' */}
+                      <tr key={visitor.id} className="border-b hover:bg-teal-50/20 transition-colors">
                         <td className="p-4 text-sm text-gray-500">{new Date(visitor.visitDate).toLocaleString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' })}</td>
                         <td className="p-4 font-bold">{visitor.name}</td>
                         <td className="p-4 text-gray-600">{visitor.birthDate}</td>
@@ -217,11 +215,11 @@ export default function App() {
                         <td className="p-4 text-center">
                           {deleteConfirmId === visitor.id ? (
                             <div className="flex gap-1 justify-center">
-                              <button onClick={() => { setVisitors(prev => prev.filter(v => v.id !== visitor.id)); setDeleteConfirmId(null); }} className="px-2 py-1 bg-red-500 text-white rounded text-xs">삭제</button>
-                              <button onClick={() => setDeleteConfirmId(null)} className="px-2 py-1 bg-gray-200 rounded text-xs">취소</button>
+                              <button onClick={() => { setVisitors(prev => prev.filter(v => v.id !== visitor.id)); setDeleteConfirmId(null); }} className="px-2 py-1 bg-red-500 text-white rounded text-xs shadow-sm">삭제</button>
+                              <button onClick={() => setDeleteConfirmId(null)} className="px-2 py-1 bg-gray-200 rounded text-xs shadow-sm">취소</button>
                             </div>
                           ) : (
-                            <button onClick={() => setDeleteConfirmId(visitor.id)} className="p-1 text-red-600 hover:bg-red-50 rounded"><Trash2 className="w-4 h-4"/></button>
+                            <button onClick={() => setDeleteConfirmId(visitor.id)} className="p-1 text-red-600 hover:bg-red-50 rounded transition-colors"><Trash2 className="w-4 h-4"/></button>
                           )}
                         </td>
                       </tr>
@@ -231,7 +229,7 @@ export default function App() {
               </table>
             </div>
             <div className="mt-4 text-right text-gray-400 text-sm">
-              총 {getFilteredVisitors().length}명의 데이터가 로컬 저장소에 보관 중입니다.
+              총 <span className="font-bold text-teal-600">{getFilteredVisitors().length}</span>명의 데이터가 로컬 저장소에 보관 중입니다.
             </div>
           </div>
         )}
