@@ -112,7 +112,9 @@ export default function App() {
       <header className="bg-white shadow-sm p-4 sticky top-0 z-10">
         <div className="max-w-4xl mx-auto flex justify-between items-center">
           <div className="flex items-center gap-2 text-orange-600">
-            <Home className="w-8 h-8" />
+            {/* [수정 시작] 로고 이미지 추가 부분 */}
+            <img src="/welfare_logo.png" alt="티뷰크사회복지재단 금천누리종합사회복지관" className="h-10 w-auto" />
+            {/* [수정 끝] */}
             <h1 className="text-2xl font-bold">마음편의점</h1>
           </div>
           <div className="flex gap-2">
